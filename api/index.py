@@ -159,6 +159,35 @@ def procesar_imagen_endpoint():
         "image_file": output_files["image"]
     }), 200
 
+@app.route('/output/<filename>', methods=['GET'])
+def get_resource(filename):
+    OUTPUT_FOLDER = "/app/output"
+    try:
+        file_path = os.path.join(OUTPUT_FOLDER, filename)
+        
+        # Check if file exists
+        if not os.path.exists(file_path):
+            return jsonify({"error": "File not found"}), 404
+        
+        # Determine content type based on file extension
+        content_type = None
+        if filename.endswith('.mp3'):
+            content_type = 'audio/mpeg'
+        elif filename.endswith(('.png', '.jpg', '.jpeg')):
+            content_type = 'image/' + filename.split('.')[-1]
+        
+        if content_type is None:
+            return jsonify({"error": "Unsupported file type"}), 400
+        
+        return send_file(
+            file_path,
+            mimetype=content_type,
+            as_attachment=True,
+            download_name=filename
+        )
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+        
 @app.route('/output/download_all', methods=['GET'])
 def download_all_files():
     zip_filename = "output_files.zip"
@@ -175,7 +204,7 @@ def download_all_files():
         return send_file(zip_path, as_attachment=True)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
+"""
 @app.route('/output', methods=['GET'])
 def list_files():
     try:
@@ -183,7 +212,7 @@ def list_files():
         return jsonify({"files": files})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
+"""
 @app.after_request
 def add_cors_headers(response):
     response.headers['Access-Control-Allow-Origin'] = '*'
