@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Star Coordinates - Audio Processor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #313131;
+            text-align: center;
+        }
+
+        .container {
+            width: 80%;
+            margin: 50px auto;
+            background-color: #6d6d6d;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .form-container {
+            display: inline-block;
+            text-align: left;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input[type="number"], input[type="file"] {
+            padding: 10px;
+            width: 100%;
+            border: 2px solid #000;
+            border-radius: 50px;
+        }
+
+        input[type="submit"], button {
+            background-color: #000;
+            color: #fff;
+            padding: 20px 20px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover, button:hover {
+            background-color: #555;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-gap: 20px;
+        }
+
+        .image-container {
+            text-align: right;
+        }
+
+        img {
+            width: 300px;
+        }
+
+        .form-label {
+            font-size: 1em;
+        }
+
+        .form-input {
+            background-color: #000;
+            color: #fff;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 1em;
+            display: inline-block;
+            width: 210px;
+        }
+
+        .image-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .image-buttons .form-group {
+            flex: 1 1 150px; /* Minimum width for the buttons */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>POLARIS</h1>
+        <h2>melody of the stars</h2>
+        <div class="grid-container">
+            <div class="form-container">
+                <div class="form-group">
+                    <label class="form-label">Interval Between Stars (ms)</label>
+                    <input class="form-input" type="number" id="interval" value="350" placeholder="Enter interval" min="1" max="10000" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Limit Stars</label>
+                    <input class="form-input" type="number" id="star_limit" value="50" placeholder="Enter limit" min="1" max="100" required>
+                </div>
+            </div>
+        </div>
+        <h2>IMAGES</h2>
+        <div class="image-buttons" style="gap: 1px">
+            <div class="form-group">
+                <button onclick="processImage('https://res.cloudinary.com/dsaw5z3ot/image/upload/v1728179558/0cb41355-f4c6-45c0-a74e-36b60ccb014f.png')">Image 1</button>
+            </div>
+            <div class="form-group">
+                <button onclick="processImage('https://res.cloudinary.com/dsaw5z3ot/image/upload/v1728179463/2c8a5d23-fa83-48bc-b1ea-bbc550d1d169.png')">Image 2</button>
+            </div>
+            <div class="form-group">
+                <button onclick="processImage('https://res.cloudinary.com/dsaw5z3ot/image/upload/v1728179442/bf5e4a2d-63a1-4990-8c1a-444a27c801bf.png')">Image 3</button>
+            </div>
+            <div class="form-group">
+                <button onclick="processImage('https://res.cloudinary.com/dsaw5z3ot/image/upload/v1728179437/51f7d6f8-bf6f-499e-bf70-8cdded31b44b.png')">Image 4</button>
+            </div>
+            <div class="form-group">
+                <button onclick="processImage('https://res.cloudinary.com/dsaw5z3ot/image/upload/v1728179364/89afc256-aa51-4fa2-8e49-f1697978d110.png')">Image 5</button>
+            </div> 
+            <div class="form-group">
+                <button onclick="processImage('https://res.cloudinary.com/dsaw5z3ot/image/upload/v1728179325/66924727-d065-482a-87b7-d71d5dc3ba65.png')">Image 6</button>
+            </div>
+            <div class="form-group">
+                <button onclick="processImage('https://res.cloudinary.com/dsaw5z3ot/image/upload/v1728179287/95e0980f-0d0f-4060-83b1-f00619d1853e.png')">Image 7</button>
+            </div>
+            <div class="form-group">
+                <button onclick="processImage('https://res.cloudinary.com/dsaw5z3ot/image/upload/v1728179254/58677359-730d-4f97-a53a-bdde5f1757ee.png')">Image 8</button>
+            </div>
+            <div class="form-group">
+                <button onclick="processImage('https://res.cloudinary.com/dsaw5z3ot/image/upload/v1728179231/2cbb4b5b-74dd-486a-9b89-4ccf08eaefae.png')">Image 9</button>
+            </div>
+            <div class="form-group">
+                <button onclick="processImage('https://res.cloudinary.com/dsaw5z3ot/image/upload/v1728179209/9b58d9ad-563d-4b5d-9ba6-3b9019fd32a5.png')">Image 10</button>
+            </div>
+            <div class="form-group">
+                <button onclick="processImage('https://res.cloudinary.com/dsaw5z3ot/image/upload/v1728179001/98e90540-30a8-4eee-81e8-aadacca27db1.png')">Image 11</button>
+            </div>
+            <!-- Add more images as needed -->
+        </div>
+        <div id="result" style="margin-top: 20px; color: white;"></div>
+    </div>
+
+    <script>
+        function processImage(imageUrl) {
+            const interval = document.getElementById('interval').value;
+            const starLimit = document.getElementById('star_limit').value;
+
+            const data = {
+                url: imageUrl,
+                interval_between_starts: parseInt(interval),
+                star_limit: parseInt(starLimit)
+            };
+
+            fetch('http://localhost:5000/procesar_imagen', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+})
+
+            .then(response => response.json())
+            .then(result => {
+                if (result.error) {
+                    document.getElementById('result').innerText = 'Error: ' + result.error;
+                } else {
+                    const audioFile = result.audio_file;
+                    document.getElementById('result').innerHTML = `<p>Processing completed! <a href="/download/${audioFile}" download>Download Audio</a></p>`;
+                }
+            })
+            .catch(error => {
+                document.getElementById('result').innerText = 'Error: ' + error.message;
+            });
+        }
+    </script>
+</body>
+</html>

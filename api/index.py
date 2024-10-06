@@ -6,6 +6,11 @@ import requests
 from PIL import Image
 from io import BytesIO
 from flask import Flask, request, jsonify
+from flask import Flask, jsonify, request, send_file
+from flask_cors import CORS
+
+app = Flask(__name__)
+CORS(app)
 
 # Definir la carpeta de sonidos del piano
 AUDIO_FOLDER = "piano"  # Asegúrate de que contenga archivos como 25.mp3, 26.mp3, etc.
