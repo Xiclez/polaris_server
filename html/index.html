@@ -9,6 +9,7 @@
             font-family: Arial, sans-serif;
             background-color: #313131;
             text-align: center;
+            color: white;
         }
 
         .container {
@@ -20,7 +21,7 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        h1 {
+        h1, h2 {
             font-size: 2.5em;
             margin-bottom: 20px;
         }
@@ -66,18 +67,6 @@
             grid-gap: 20px;
         }
 
-        .image-container {
-            text-align: right;
-        }
-
-        img {
-            width: 300px;
-        }
-
-        .form-label {
-            font-size: 1em;
-        }
-
         .form-input {
             background-color: #000;
             color: #fff;
@@ -98,12 +87,30 @@
         .image-buttons .form-group {
             flex: 1 1 150px; /* Minimum width for the buttons */
         }
+
+        #result {
+            margin-top: 20px;
+            color: white;
+            font-size: 1.2em;
+        }
+
+        .loading {
+            color: yellow;
+        }
+
+        .error {
+            color: red;
+        }
+
+        .success {
+            color: green;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>POLARIS</h1>
-        <h2>melody of the stars</h2>
+        <h2>Melody of the Stars</h2>
         <div class="grid-container">
             <div class="form-container">
                 <div class="form-group">
@@ -153,11 +160,12 @@
             </div>
             <!-- Add more images as needed -->
         </div>
-        <div id="result" style="margin-top: 20px; color: white;"></div>
+
+        <div id="result"></div>
     </div>
 
     <script>
-        function processImage(imageUrl) {
+        async function processImage(imageUrl) {
             const interval = document.getElementById('interval').value;
             const starLimit = document.getElementById('star_limit').value;
 
@@ -167,26 +175,31 @@
                 star_limit: parseInt(starLimit)
             };
 
-            fetch('http://localhost:5000/procesar_imagen', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-})
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<p class="loading">Processing image...</p>';
 
-            .then(response => response.json())
-            .then(result => {
+            try {
+                const response = await fetch('http://20.81.208.230:5000/procesar_imagen', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*',
+                    },
+                    body: JSON.stringify(data),
+                    mode: 'cors',
+                });
+
+                const result = await response.json();
+
                 if (result.error) {
-                    document.getElementById('result').innerText = 'Error: ' + result.error;
+                    resultDiv.innerHTML = `<p class="error">Error: ${result.error}</p>`;
                 } else {
                     const audioFile = result.audio_file;
-                    document.getElementById('result').innerHTML = `<p>Processing completed! <a href="/download/${audioFile}" download>Download Audio</a></p>`;
+                    resultDiv.innerHTML = `<p class="success">Processing completed! <a href="/download/${audioFile}" download>Download Audio</a></p>`;
                 }
-            })
-            .catch(error => {
-                document.getElementById('result').innerText = 'Error: ' + error.message;
-            });
+            } catch (error) {
+                resultDiv.innerHTML = `<p class="error">Error: ${error.message}</p>`;
+            }
         }
     </script>
 </body>
